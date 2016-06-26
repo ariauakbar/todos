@@ -1,28 +1,18 @@
 package main
 
 import (
-  "fmt"
+  //"fmt"
   "github.com/ariauakbar/todos/models"
   "path"
   "html/template"
   "net/http"
+  "strconv"
   // "log"
 )
 
 func main() {
-
-http.HandleFunc("/", IndexHandler)
-http.ListenAndServe(":8080", nil)
-
-  //models.CreateTodoTable()
-
-  // for i := 0; i < 5; i++{
-  //   models.CreateTodo("Creating Presentation")
-  // }
-  todos := models.GetAllTodos()
-  for _, todo := range todos {
-    fmt.Println(todo.Name)
-  }
+  http.HandleFunc("/", IndexHandler)
+  http.ListenAndServe(":8080", nil)
 }
 
 func IndexHandler(w http.ResponseWriter, r *http.Request)  {
@@ -34,9 +24,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request)  {
       http.Error(w, err.Error(), http.StatusInternalServerError)
       return
     }
-
     todos := models.GetAllTodos()
-
     if err := tmpl.Execute(w, todos); err != nil {
       http.Error(w, err.Error(), http.StatusInternalServerError)
     }
@@ -44,5 +32,12 @@ func IndexHandler(w http.ResponseWriter, r *http.Request)  {
     name := r.FormValue("name")
     models.CreateTodo(name)
     http.Redirect(w, r, r.Referer(), http.StatusMovedPermanently)
+  } else if r.Method == "PUT" {
+    cap_id := r.FormValue("id")
+    id, err := strconv.Atoi(cap_id)
+    if err != nil {
+      panic(err.Error())
+    }
+    models.ToggleFinishedByID(id)
   }
 }

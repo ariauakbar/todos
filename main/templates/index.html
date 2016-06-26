@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Todos</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   </head>
   <body>
     <form class="/" action="index.html" method="post">
@@ -11,8 +12,24 @@
     </form>
     <ul>
       {{range .}}
-      <li> <input type="checkbox" name="name" value=""> {{.Name}}</li>
+        {{if .Finished}}
+        <li> <input type="checkbox" name="name" value="{{.ID}}" checked><s>{{.Name}}</s></li>
+        {{else}}
+        <li> <input type="checkbox" name="name" value="{{.ID}}">{{.Name}}</li>
+        {{end}}
       {{end}}
     </ul>
+    <script type="text/javascript">
+      $("input[type='checkbox']").change(function() {
+        $.ajax({
+          url: "/",
+          type: "PUT",
+          data: {id: this.value},
+          success: function (response) {
+            location.reload();
+          }
+        });
+      });
+    </script>
   </body>
 </html>
