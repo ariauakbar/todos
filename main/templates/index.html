@@ -4,21 +4,46 @@
     <meta charset="utf-8">
     <title>Todos</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <style media="screen">
+      #container {
+        width: 960px;
+        height: 900px;
+        background-color: #F2F2F2;
+        margin: 0 auto;
+      }
+
+      ol {
+        list-style-type: none;
+      }
+
+      li {
+        border-bottom: 1px solid red;
+      }
+
+      label {
+        font-size: 30px;
+        padding-left: 10px;
+      }
+
+    </style>
   </head>
   <body>
-    <form class="/" action="index.html" method="post">
-      <input type="text" name="name" value="">
-      <input type="submit" value="Submit">
-    </form>
-    <ul>
-      {{range .}}
-        {{if .Finished}}
-        <li> <input type="checkbox" name="name" value="{{.ID}}" checked><s>{{.Name}}</s></li>
-        {{else}}
-        <li> <input type="checkbox" name="name" value="{{.ID}}">{{.Name}}</li>
+    <div id="container">
+      <form class="/" action="index.html" method="post">
+        <input type="text" name="name" value="">
+        <input type="submit" value="Submit">
+      </form>
+      <ol id="todos">
+        {{range .}}
+          {{if .Finished}}
+          <li><label><input type="checkbox" name="name" value="{{.ID}}" checked><s> {{.Name}}</s></label></li>
+          {{else}}
+          <li><label><input type="checkbox" name="name" value="{{.ID}}"> {{.Name}}</label></li>
+          {{end}}
         {{end}}
-      {{end}}
-    </ul>
+      </ol>
+  </div>
     <script type="text/javascript">
       $("input[type='checkbox']").change(function() {
         $.ajax({
@@ -26,7 +51,7 @@
           type: "PUT",
           data: {id: this.value},
           success: function (response) {
-            location.reload();
+             location.reload();
           }
         });
       });
