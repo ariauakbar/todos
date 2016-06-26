@@ -33,8 +33,8 @@ func IndexHandler(w http.ResponseWriter, r *http.Request)  {
     models.CreateTodo(name)
     http.Redirect(w, r, r.Referer(), http.StatusMovedPermanently)
   } else if r.Method == "PUT" {
-    cap_id := r.FormValue("id")
-    id, err := strconv.Atoi(cap_id)
+    todoID := r.FormValue("id")
+    id, err := strconv.Atoi(todoID)
     if err != nil {
       panic(err.Error())
     }
